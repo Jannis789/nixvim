@@ -8,29 +8,31 @@
   };
 
   outputs = { self, nixvim, flake-parts, ... }@inputs:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
+    let
+      flakePartsOut = flake-parts.lib.mkFlake { inherit inputs; } {
+        systems = [
+          "x86_64-linux"
+          "aarch64-linux"
+          "x86_64-darwin"
+          "aarch64-darwin"
+        ];
 
-      perSystem = { system, ... }: let
-        nixvimLib = nixvim.lib.${system};
-        nixvim' = nixvim.legacyPackages.${system};
-        nixvimModule = {
-          inherit system;
-          module = import ./config;
-          extraSpecialArgs = {};
+        perSystem = { system, ... }: let
+          nixvimLib = nixvim.lib.${system};
+          nixvim' = nixvim.legacyPackages.${system};
+          nixvimModule = {
+            inherit system;
+            module = import ./config;
+            extraSpecialArgs = {};
+          };
+          nvim = nixvim'.makeNixvimWithModule nixvimModule;
+        in {
+          checks.default = nixvimLib.check.mkTestDerivationFromNixvimModule nixvimModule;
+          packages.default = nvim;
         };
-        nvim = nixvim'.makeNixvimWithModule nixvimModule;
-      in {
-        checks.default = nixvimLib.check.mkTestDerivationFromNixvimModule nixvimModule;
-        packages.default = nvim;
       };
-
-      # >>>>> Das hier hinzufügen! <<<<<
+    in
+    flakePartsOut // {
       nixosModules.nixvim = nixvim.nixosModules.nixvim;
       homeModules.nixvim = nixvim.homeModules.nixvim;
     };
