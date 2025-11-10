@@ -1,7 +1,6 @@
 { pkgs, ... }:
 
 {
-  # Import all your configuration modules here
   imports = [ ./bufferline.nix ];
   colorschemes.catppuccin = {
     enable = true;
@@ -11,7 +10,20 @@
     };
   };
   plugins = {
-
+    copilot-lua = {
+      enable = true;
+      settings = {
+        setup = {
+          suggestion = {
+            enabled = true;
+            auto_trigger = true;
+          };
+          filetypes = {
+            markdown = true;
+          };
+        };
+      };
+    };
     lualine = {
       enable = true;
       settings = {
@@ -24,6 +36,23 @@
     lazy = {
       enable = true;
       plugins = [
+        {
+          name = "copilot.lua";
+          pkg = pkgs.vimPlugins.copilot-lua;
+          event = "VimEnter";
+          config = ''
+            require("copilot").setup({
+              suggestion = {
+                enabled = true,
+                auto_trigger = true,
+              },
+              filetypes = {
+                markdown = true,
+              }
+            })
+          '';
+        }
+
         {
           name = "telescope";
           pkg = pkgs.vimPlugins.telescope-nvim;
