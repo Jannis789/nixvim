@@ -1,7 +1,6 @@
 { pkgs, ... }:
 
 {
-  imports = [ ./bufferline.nix ];
   colorschemes.catppuccin = {
     enable = true;
     settings = {
@@ -9,21 +8,19 @@
       transparentBg = true;
     };
   };
-  plugins = {
+
+  plugins = {   
+    # --- Copilot Lua (Autocomplete) ---
     copilot-lua = {
       enable = true;
       settings = {
-        setup = {
-          suggestion = {
-            enabled = true;
-            auto_trigger = true;
-          };
-          filetypes = {
-            markdown = true;
-          };
+        suggestion = {
+          enabled = true;
+          auto_trigger = true;
         };
       };
     };
+
     lualine = {
       enable = true;
       settings = {
@@ -35,26 +32,30 @@
 
     lazy = {
       enable = true;
+
       plugins = [
+
+        # --- Copilot Chat ---
         {
-          name = "copilot.lua";
-          pkg = pkgs.vimPlugins.copilot-lua;
+          name = "CopilotChat.nvim";
+          pkg = pkgs.vimPlugins.CopilotChat-nvim;
+          dependencies = [ pkgs.vimPlugins.plenary-nvim ];
           event = "VimEnter";
-          config = ''
-            require("copilot").setup({
-              suggestion = {
-                enabled = true,
-                auto_trigger = true,
-              },
-              filetypes = {
-                markdown = true,
-              }
-            })
+          config = builtins.toJSON ''
+            function()
+              local ok, copilotchat = pcall(require, "CopilotChat")
+              if ok then
+                copilotchat.setup({ context = "buffer", show_help = true })
+              else
+                vim.notify("CopilotChat failed to load", vim.log.levels.WARN)
+              end
+            end
           '';
         }
 
+        # --- Telescope ---
         {
-          name = "telescope";
+          name = "telescope.nvim";
           pkg = pkgs.vimPlugins.telescope-nvim;
           dependencies = with pkgs.vimPlugins; [
             plenary-nvim
@@ -63,6 +64,7 @@
           event = [ "VimEnter" ];
         }
 
+        # --- nvim-cmp ---
         {
           name = "nvim-cmp";
           pkg = pkgs.vimPlugins.nvim-cmp;
@@ -79,17 +81,20 @@
           ];
         }
 
+        # --- Git ---
         {
           name = "vim-fugitive";
           pkg = pkgs.vimPlugins.vim-fugitive;
           event = [ "VimEnter" ];
         }
 
+        # --- Theme ---
         {
           name = "catppuccin";
           pkg = pkgs.vimPlugins.catppuccin-nvim;
           event = [ "VimEnter" ];
         }
+
       ];
     };
   };
