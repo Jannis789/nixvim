@@ -5,9 +5,11 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixvim.url = "github:nix-community/nixvim";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    secrets.url = "git+ssh://git@github.com/Jannis789/secrets.git?ref=main";
+    secrets.flake = false;
   };
 
-  outputs = { self, nixvim, flake-parts, ... }@inputs:
+  outputs = { self, nixvim, flake-parts, secrets, ... }@inputs:
     let
       flakePartsOut = flake-parts.lib.mkFlake { inherit inputs; } {
         systems = [
@@ -23,7 +25,9 @@
           nixvimModule = {
             inherit system;
             module = import ./config;
-            extraSpecialArgs = {};
+            extraSpecialArgs = {
+              inherit secrets;
+            };
           };
           nvim = nixvim'.makeNixvimWithModule nixvimModule;
         in {
