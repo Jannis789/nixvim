@@ -1,43 +1,43 @@
 {
-  description = "A nixvim configuration";
+  description = "A Nixvim configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixvim.url = "github:nix-community/nixvim";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    secrets.url = "git+ssh://git@github.com/Jannis789/secrets.git?ref=main";
-    secrets.flake = false;
+
+    # Private secrets (API keys, tokens). Passed to config modules
+    # via extraSpecialArgs. Set secrets.flake = false.
+    # Uncomment and add a files/nvim-env entry when avante etc. are configured:
+    # secrets.url = "git+ssh://git@github.com/Jannis789/secrets.git?ref=main";
+    # secrets.flake = false;
   };
 
-  outputs = { self, nixvim, flake-parts, secrets, ... }@inputs:
-    let
-      flakePartsOut = flake-parts.lib.mkFlake { inherit inputs; } {
-        systems = [
-          "x86_64-linux"
-          "aarch64-linux"
-          "x86_64-darwin"
-          "aarch64-darwin"
-        ];
+  outputs =
+    { nixvim, flake-parts, ... }@inputs:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
 
-        perSystem = { system, ... }: let
-          nixvimLib = nixvim.lib.${system};
-          nixvim' = nixvim.legacyPackages.${system};
-          nixvimModule = {
+      perSystem =
+        { system, ... }:
+        let
+          configuration = nixvim.lib.evalNixvim {
             inherit system;
-            module = import ./config;
-            extraSpecialArgs = {
-              inherit secrets;
-            };
+
+            modules = [ ./config ];
+
+            # Pass non-flake inputs (like secrets) to config modules.
+            # Secrets are accessed as `{ secrets, ... }:` in any module.
+            # extraSpecialArgs = { inherit (inputs) secrets; };
           };
-          nvim = nixvim'.makeNixvimWithModule nixvimModule;
-        in {
-          checks.default = nixvimLib.check.mkTestDerivationFromNixvimModule nixvimModule;
-          packages.default = nvim;
+        in
+        {
+          checks.default = configuration.config.build.test;
+          packages.default = configuration.config.build.package;
         };
-      };
-    in
-    flakePartsOut // {
-      nixosModules.nixvim = nixvim.nixosModules.nixvim;
-      homeModules.nixvim = nixvim.homeModules.nixvim;
     };
 }
