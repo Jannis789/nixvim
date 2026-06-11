@@ -1,15 +1,17 @@
 { pkgs, ... }:
 
 {
+  globals.mapleader = " ";
+
   plugins.telescope = {
     enable = true;
 
     keymaps = {
-      "<leader>ff" = {
+      "<leader>ff" = { # 1
         action = "find_files";
         options.desc = "Find Files";
       };
-      "<leader>fg" = {
+      "<leader>fg" = { # 1
         action = "live_grep";
         options.desc = "Live Grep";
       };

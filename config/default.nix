@@ -6,6 +6,7 @@
     ./colorscheme.nix
     ./statusline.nix
     ./telescope.nix
+    ./bufferline.nix
     ./ui.nix
     ./tree.nix
   ];
