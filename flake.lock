@@ -110,7 +110,25 @@
       "inputs": {
         "flake-parts": "flake-parts",
         "nixpkgs": "nixpkgs",
-        "nixvim": "nixvim"
+        "nixvim": "nixvim",
+        "secrets": "secrets"
+      }
+    },
+    "secrets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781107560,
+        "narHash": "sha256-uNVpN4WLIeiu2rs8u26uNEKggvha6rhF2AAWA7kQnXI=",
+        "ref": "main",
+        "rev": "9f09caf525b66d5f59244de751a23e71f48255a7",
+        "revCount": 3,
+        "type": "git",
+        "url": "ssh://git@github.com/Jannis789/secrets.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "ssh://git@github.com/Jannis789/secrets.git"
       }
     },
     "systems": {
