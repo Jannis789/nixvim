@@ -9,5 +9,6 @@
     ./bufferline.nix
     ./ui.nix
     ./tree.nix
+    ./avante.nix
   ];
 }

@@ -16,7 +16,7 @@
       options.desc = "Buffer left";
     }
     {
-      key = "M";
+      key = "m";
       action = ":BufferLineCycleNext<CR>";
       options.desc = "Buffer right";
     }

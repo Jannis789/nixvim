@@ -30,6 +30,7 @@ If a plugin is needed by `vim.ui.*` patches, the relevant check is
 | `docs/NIXVIM.md`      | Mental model: module system → init.lua, rtp, lazy |
 | `docs/PLUGINS.md`     | How to add plugins (3 patterns + the lazy.nvim trap) |
 | `docs/STYLE.md`       | Code style for the Nix config and embedded Lua    |
+| `docs/KEYBINDS.md`    | Custom keybindings                                 |
 
 External reference (read first when in doubt):
 - https://nix-community.github.io/nixvim/  — generated option & plugin reference
