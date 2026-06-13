@@ -1,20 +1,10 @@
-{ pkgs, ... }:
-
-{
+{ pkgs, ... }: {
   globals.mapleader = " ";
 
   plugins.telescope = {
     enable = true;
 
     keymaps = {
-      "<leader>ff" = { # 1
-        action = "find_files";
-        options.desc = "Find Files";
-      };
-      "<leader>fg" = { # 1
-        action = "live_grep";
-        options.desc = "Live Grep";
-      };
       "<leader>fb" = {
         action = "buffers";
         options.desc = "Buffers";
@@ -27,6 +17,23 @@
 
     extensions.file-browser.enable = true;
   };
+
+  # Scope-übergreifend (alle Modi ausser insert):
+  #   <Space>p = Dateisuche, <Space>o = Codesuche
+  keymaps = [
+    {
+      key = "<leader>p";
+      action = "<cmd>Telescope find_files<CR>";
+      options.desc = "Find Files";
+      mode = ["n" "v" "x" "s" "o" "t" "l"];
+    }
+    {
+      key = "<leader>o";
+      action = "<cmd>Telescope live_grep<CR>";
+      options.desc = "Live Grep";
+      mode = ["n" "v" "x" "s" "o" "t" "l"];
+    }
+  ];
 
   extraPackages = with pkgs; [ ripgrep fd ];
 }

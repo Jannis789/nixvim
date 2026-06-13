@@ -9,6 +9,7 @@
     ./bufferline.nix
     ./ui.nix
     ./tree.nix
-    ./avante.nix
+    ./terminal.nix
+    ./agentic.nix
   ];
 }
