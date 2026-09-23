@@ -7,15 +7,14 @@
 | `n` | `BufferLineCyclePrev` | Zum vorherigen Tab (links) |
 | `m` | `BufferLineCycleNext` | Zum nächsten Tab (rechts)  |
 
-## Avante (Sidebar)
+## pi (headless über pi.nvim)
 
-| Keybinding                  | Beschreibung                             |
-|-----------------------------|------------------------------------------|
-| `<leader>aa`                | Sidebar öffnen/schließen                 |
-| `<leader>an`                | Neue Frage (Ask)                         |
-| `<leader>ac`                | Aktuelles File zu Selected Files hinzufügen |
-| `<AltGr> + <Enter>`         | Nachricht abschicken                     |
-| `<Tab>` / `<S-Tab>`         | Fenster wechseln                         |
+| Keybinding | Beschreibung |
+|------------|--------------|
+| `<leader>d` / `3` | Pi-Ask: Prompt eingeben, aktueller Buffer ist Kontext; pi editiert Dateien, Buffer werden neu geladen |
+| `<leader>d` / `3` (visual) | PiAskSelection: Selektion als zusätzlichen Kontext |
+| `<leader>D` | Laufende pi-Anfrage abbrechen |
+| `:PiLog` | Session-Log in neuem Split öffnen |
 
 ## Telescope
 

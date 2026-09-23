@@ -12,7 +12,7 @@
   # n/m: Bufferline-Tab-Navigation via BufEnter-Autocmd
   # Verwendet vim.schedule + Lua-Funktionen.
   # Wichtig: bufferline.cycle() braucht einen Buffer der in bufferlines
-  # Tab-Liste ist. Plugin-Buffer (NvimTree, Agentic, toggleterm) sind gefiltert.
+  # Tab-Liste ist. Plugin-Buffer (NvimTree, toggleterm) sind gefiltert.
   # Daher: vor cycle() kurz zu einem Editor-Buffer wechseln, dann cyclen.
   extraConfigLua = ''
     local bufgroup = vim.api.nvim_create_augroup("BufferlineTabKeys", { clear = true })
@@ -20,13 +20,13 @@
     local function focus_editor()
       local ft = vim.bo[vim.api.nvim_get_current_buf()].filetype
       local plugin_ft = { NvimTree = true, toggleterm = true }
-      if not plugin_ft[ft] and not (ft and ft:match("^Agentic")) then
+      if not plugin_ft[ft] then
         return -- schon im Editor
       end
       for _, win in ipairs(vim.api.nvim_list_wins()) do
         local buf = vim.api.nvim_win_get_buf(win)
         local bft = vim.bo[buf].filetype
-        if bft ~= "NvimTree" and not (bft and bft:match("^Agentic")) and bft ~= "toggleterm" then
+        if bft ~= "NvimTree" and bft ~= "toggleterm" then
           vim.api.nvim_set_current_win(win)
           return
         end

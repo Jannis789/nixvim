@@ -10,6 +10,6 @@
     ./ui.nix
     ./tree.nix
     ./terminal.nix
-    ./agentic.nix
+    ./pi.nix
   ];
 }

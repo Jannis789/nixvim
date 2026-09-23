@@ -112,7 +112,6 @@ loader), not lazy.nvim.**
 | Plugin       | What to know                                            |
 |--------------|---------------------------------------------------------|
 | `lualine`    | Its `setup()` registers `ColorScheme` / `OptionSet` autocmds that fire during TUI startup. If you re-`setup()` lualine later (e.g. in `extraConfigLuaPost`), clear the original handlers first or you get a race where the theme config is lost. |
-| `avante`     | Needs `NOUS_API_KEY` in env. If reading from a private secrets flake input, use `builtins.readFile` at evaluation time (not `builtins.fetchurl` at runtime) and inline it into `vim.env` via `extraConfigLua`. |
 | `dressing`   | `require("dressing").setup({})` only loads the `dressing` init; `dressing.input` and `dressing.select` are lazy-required. This is fine with native `enable` (plugin stays in rtp) but breaks if you also use lazy.nvim. |
 | `telescope`  | Extensions (`file_browser`, `fzf`, …) must be loaded explicitly via `require("telescope").load_extension("...")`. Configure extensions under `plugins.telescope.extensions.<name>.enable = true`. |
 | `nvim-cmp`   | Source registration goes under `plugins.cmp.sources` (list of `{ name = "..."; ... }` entries). |
