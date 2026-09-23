@@ -22,6 +22,21 @@
       size = function() return math.floor(vim.o.columns * 0.4) end,
       on_exit = function(term) term:shutdown() end,
     })
-    function _G.toggle_pi() pi_term:toggle() end
+    -- Scope-Logik wie Taste 1: nicht sichtbar -> öffnen; sichtbar, aber
+    -- nicht fokussiert -> nur fokussieren (Scope-Wechsel); fokussiert ->
+    -- verstecken (Session läuft weiter).
+    function _G.toggle_pi()
+      for _, win in ipairs(vim.api.nvim_list_wins()) do
+        if pi_term.bufnr and vim.api.nvim_win_get_buf(win) == pi_term.bufnr then
+          if win == vim.api.nvim_get_current_win() then
+            pi_term:toggle()
+          else
+            vim.api.nvim_set_current_win(win)
+          end
+          return
+        end
+      end
+      pi_term:toggle()
+    end
   '';
 }
