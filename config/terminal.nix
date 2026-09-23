@@ -13,9 +13,10 @@
   # pi als persistenter Toggle-Terminal (Taste 3): Toggle versteckt nur,
   # die Session läuft weiter. Beendet man pi selbst, schließt das Terminal
   # (on_exit -> shutdown), damit man nie in einer bash landet.
+  # -c: beim Neustart die zuletzt aktive Session fortsetzen.
   extraConfigLua = ''
     local pi_term = require("toggleterm.terminal").Terminal:new({
-      cmd = "pi",
+      cmd = "pi -c",
       hidden = true,
       direction = "vertical",
       size = function() return math.floor(vim.o.columns * 0.4) end,
