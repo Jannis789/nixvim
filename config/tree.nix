@@ -34,7 +34,7 @@
         end
       end'';
       options.desc = "Treeview";
-      mode = ["n" "v" "x" "s" "o" "t" "l"];
+      mode = ["n"];
     }
     {
       key = "2";
@@ -49,19 +49,13 @@
         end
       end'';
       options.desc = "Editor";
-      mode = ["n" "v" "x" "s" "o" "t" "l"];
-    }
-    {
-      key = "3";
-      action = "<cmd>PiAsk<CR>";
-      options.desc = "pi (AI)";
       mode = ["n"];
     }
     {
       key = "3";
-      action = "<cmd>PiAskSelection<CR>";
+      action.__raw = ''function() _G.toggle_pi() end'';
       options.desc = "pi (AI)";
-      mode = ["v"];
+      mode = ["n"];
     }
   ];
 }

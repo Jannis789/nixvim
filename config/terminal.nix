@@ -9,4 +9,18 @@
       shade_terminals = false;
     };
   };
+
+  # pi als persistenter Toggle-Terminal (Taste 3): Toggle versteckt nur,
+  # die Session läuft weiter. Beendet man pi selbst, schließt das Terminal
+  # (on_exit -> shutdown), damit man nie in einer bash landet.
+  extraConfigLua = ''
+    local pi_term = require("toggleterm.terminal").Terminal:new({
+      cmd = "pi",
+      hidden = true,
+      direction = "vertical",
+      size = function() return math.floor(vim.o.columns * 0.4) end,
+      on_exit = function(term) term:shutdown() end,
+    })
+    function _G.toggle_pi() pi_term:toggle() end
+  '';
 }
