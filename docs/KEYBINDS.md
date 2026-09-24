@@ -1,5 +1,13 @@
 # KEYBINDS — Custom keybindings
 
+## Scopes (1/2/3, nur Normal-Mode)
+
+| Taste | Wirkung |
+|-------|---------|
+| `1` | Tree: zu wenn fokussiert, sonst öffnen+fokussieren |
+| `2` | Editor: erstes Editor-Fenster fokussieren |
+| `3` | pi: öffnen/fokussieren/verstecken (Session bleibt beim Verstecken leben) |
+
 ## Buffer navigation
 
 | Key | Action              | Beschreibung             |
