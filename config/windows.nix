@@ -30,5 +30,33 @@
       options.silent = true;
       options.desc = "Split flacher";
     }
+    {
+      key = "<A-Right>";
+      action = "<C-w>5>";
+      mode = [ "n" "t" ];
+      options.silent = true;
+      options.desc = "Split breiter";
+    }
+    {
+      key = "<A-Left>";
+      action = "<C-w>5<";
+      mode = [ "n" "t" ];
+      options.silent = true;
+      options.desc = "Split schmaler";
+    }
+    {
+      key = "<A-Up>";
+      action = "<C-w>5+";
+      mode = [ "n" "t" ];
+      options.silent = true;
+      options.desc = "Split höher";
+    }
+    {
+      key = "<A-Down>";
+      action = "<C-w>5-";
+      mode = [ "n" "t" ];
+      options.silent = true;
+      options.desc = "Split flacher";
+    }
   ];
 }
