@@ -1,17 +1,11 @@
 {
-  # Entry point for all config modules.
-  # Import feature-specific modules here and they gain access
-  # to the nixvim module system's extended lib.
+  # Entry point: die Subfolder bringen jeweils ihr eigenes default.nix mit —
+  # neue Datei = in den passenden Ordner + eine Import-Zeile dort.
+  # bindings.nix ist bereichsübergreifend und bleibt deshalb oben.
   imports = [
-    ./colorscheme.nix
-    ./statusline.nix
-    ./telescope.nix
-    ./bufferline.nix
-    ./ui.nix
-    ./tree.nix
-    ./terminal.nix
-    ./pi.nix
-    ./git.nix
     ./bindings.nix
+    ./appearance
+    ./editing
+    ./ai
   ];
 }
