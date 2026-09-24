@@ -27,7 +27,9 @@
   # -c: beim Neustart die zuletzt aktive Session fortsetzen.
   extraConfigLua = ''
     local pi_term = require("toggleterm.terminal").Terminal:new({
-      cmd = "pi -c",
+      -- fullscreen: pi rendert eigenes Viewport -> Wheel/Scroll geht an pi,
+      -- auch waehrend der Agent streamt (kein Follow-Output-Snap mehr)
+      cmd = "pi -c --tui-mode fullscreen",
       hidden = true,
       direction = "vertical",
       size = function() return math.floor(vim.o.columns * 0.4) end,
