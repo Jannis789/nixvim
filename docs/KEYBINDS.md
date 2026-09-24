@@ -16,6 +16,15 @@
 | `<leader>D` | Laufende pi-Anfrage abbrechen |
 | `:PiLog` | Session-Log in neuem Split öffnen |
 
+## Fenstergröße
+
+| Keybinding | Beschreibung |
+|------------|--------------|
+| `<C-w>a` | Split breiter (halten für Key-Repeat) |
+| `<C-w>d` | Split schmaler |
+| `<C-w>A` | Split höher |
+| `<C-w>D` | Split flacher |
+
 ## Telescope
 
 | Keybinding   | Beschreibung             |
