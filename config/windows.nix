@@ -5,28 +5,28 @@
     {
       key = "<C-w>a";
       action = "<C-w>>";
-      mode = [ "n" ];
+      mode = [ "n" "t" ];
       options.silent = true;
       options.desc = "Split breiter";
     }
     {
       key = "<C-w>d";
       action = "<C-w><";
-      mode = [ "n" ];
+      mode = [ "n" "t" ];
       options.silent = true;
       options.desc = "Split schmaler";
     }
     {
       key = "<C-w>A";
       action = "<C-w>+";
-      mode = [ "n" ];
+      mode = [ "n" "t" ];
       options.silent = true;
       options.desc = "Split höher";
     }
     {
       key = "<C-w>D";
       action = "<C-w>-";
-      mode = [ "n" ];
+      mode = [ "n" "t" ];
       options.silent = true;
       options.desc = "Split flacher";
     }
