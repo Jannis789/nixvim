@@ -17,6 +17,14 @@
 | `:PiLog` | Session-Log in neuem Split öffnen |
 | `ctrl+x` (im pi-Terminal) | Laufende Generierung abbrechen (`esc` gehört nvim) |
 
+## Git (gitsigns)
+
+| Keybinding | Beschreibung |
+|------------|--------------|
+| (Gutter) | `+` neu, `~` geändert, `_` entfernt |
+| `<leader>hp` | Hunk-Vorschau (diff des Blocks unter dem Cursor) |
+| `<leader>hd` | Datei-Diff gegen den Index in neuem Split |
+
 ## Fenstergröße
 
 | Keybinding | Beschreibung |

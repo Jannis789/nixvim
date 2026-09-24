@@ -11,6 +11,7 @@
     ./tree.nix
     ./terminal.nix
     ./pi.nix
+    ./git.nix
     ./windows.nix
   ];
 }
