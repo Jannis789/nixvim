@@ -38,9 +38,9 @@
 
 | Keybinding   | Beschreibung             |
 |--------------|--------------------------|
-| `<leader>ff` | Find Files               |
-| `<leader>fg` | Live Grep                |
-| `<leader>fb` | Buffers                  |
-| `<leader>fh` | Help Tags                |
+| `Space p` | Dateien suchen (Find Files) |
+| `Space o` | Text im Projekt suchen (Live Grep) |
+| `Space fb` | Buffer wechseln |
+| `Space fh` | Help Tags |
 
 Datei wird in AGENTS.md referenziert.
