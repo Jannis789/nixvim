@@ -12,6 +12,6 @@
     ./terminal.nix
     ./pi.nix
     ./git.nix
-    ./windows.nix
+    ./bindings.nix
   ];
 }

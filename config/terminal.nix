@@ -10,21 +10,10 @@
     };
   };
 
-  # ESC im Terminal -> Normal-Mode (sonst landet sie beim Job, z.B. pi)
-  keymaps = [
-    {
-      key = "<Esc>";
-      action = "<C-\\><C-n>";
-      mode = ["t"];
-      options.silent = true;
-      options.desc = "Terminal -> Normal";
-    }
-  ];
-
-  # pi als persistenter Toggle-Terminal (Taste 3): Toggle versteckt nur,
-  # die Session läuft weiter. Beendet man pi selbst, schließt das Terminal
-  # (on_exit -> shutdown), damit man nie in einer bash landet.
-  # -c: beim Neustart die zuletzt aktive Session fortsetzen.
+  # pi als persistenter Toggle-Terminal (Taste 3, Mapping in bindings.nix):
+  # Toggle versteckt nur, die Session läuft weiter. Beendet man pi selbst,
+  # schließt das Terminal (on_exit -> shutdown), damit man nie in einer bash
+  # landet. -c: beim Neustart die zuletzt aktive Session fortsetzen.
   extraConfigLua = ''
     local pi_term = require("toggleterm.terminal").Terminal:new({
       -- fullscreen: pi rendert eigenes Viewport -> Wheel/Scroll geht an pi,
