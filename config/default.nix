@@ -7,5 +7,6 @@
     ./appearance
     ./editing
     ./ai
+    ./lsp
   ];
 }
