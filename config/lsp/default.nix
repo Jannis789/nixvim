@@ -10,7 +10,11 @@
       html.enable = true;     # hub/index.html
       cssls.enable = true;
       jsonls.enable = true;
-      ts_ls.enable = true;    # JS/TS
+      ts_ls.enable = true;    # JS/TS/JSX/TSX (auch React)
+      vala_ls.enable = true;  # Vala
+      jdtls.enable = true;    # Java
+      pyright.enable = true;  # Python
+      sqls.enable = true;     # SQL
     };
   };
 }
