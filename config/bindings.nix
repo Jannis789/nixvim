@@ -1,35 +1,20 @@
 { ... }: {
-  # Zentrale Shortcut-Datei. Bewusste Ausnahmen:
-  #   n/m (Tab-Wechsel)  = buffer-lokal via Autocmd in bufferline.nix
-  #   <Tab> (toggleterm) = Plugin-Setting in terminal.nix
-  # Taste 3 ruft _G.toggle_pi aus terminal.nix auf.
+  # Zentrale Shortcut-Tabelle — reine Daten, keine Logik. Die Aktionen liegen
+  # in den jeweiligen Modulen: _G.toggle_tree (tree.nix), _G.focus_editor
+  # (ui.nix), _G.toggle_pi (terminal.nix), _G.git_* (git.nix).
+  # Bewusste Ausnahmen: n/m = buffer-lokal in bufferline.nix,
+  # <Tab> = toggleterm-Setting in terminal.nix.
   keymaps = [
     ## Scopes: 1 = Tree, 2 = Editor, 3 = pi — nur Normal-Mode
     {
       key = "1";
-      action.__raw = ''function()
-        local cur_buf = vim.api.nvim_win_get_buf(vim.api.nvim_get_current_win())
-        if vim.bo[cur_buf].filetype == "NvimTree" then
-          vim.cmd.NvimTreeToggle()
-        else
-          vim.cmd.NvimTreeFocus()
-        end
-      end'';
+      action.__raw = ''function() _G.toggle_tree() end'';
       options.desc = "Treeview";
       mode = ["n"];
     }
     {
       key = "2";
-      action.__raw = ''function()
-        for _, win in ipairs(vim.api.nvim_list_wins()) do
-          local buf = vim.api.nvim_win_get_buf(win)
-          local ft = vim.bo[buf].filetype
-          if ft ~= "NvimTree" and ft ~= "toggleterm" then
-            vim.api.nvim_set_current_win(win)
-            return
-          end
-        end
-      end'';
+      action.__raw = ''function() _G.focus_editor() end'';
       options.desc = "Editor";
       mode = ["n"];
     }
@@ -73,13 +58,13 @@
     ## Git (gitsigns)
     {
       key = "<leader>hp";
-      action.__raw = "function() require('gitsigns').preview_hunk() end";
+      action.__raw = "function() _G.git_preview_hunk() end";
       mode = ["n"];
       options.desc = "Git: Hunk-Vorschau";
     }
     {
       key = "<leader>hd";
-      action.__raw = "function() require('gitsigns').diffthis() end";
+      action.__raw = "function() _G.git_diff_index() end";
       mode = ["n"];
       options.desc = "Git: Diff gegen Index";
     }

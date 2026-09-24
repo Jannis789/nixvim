@@ -21,4 +21,16 @@
       '';
     };
   };
+
+  # Taste 1 (bindings.nix): Tree zu, wenn fokussiert — sonst öffnen+fokussieren
+  extraConfigLua = ''
+    function _G.toggle_tree()
+      local cur_buf = vim.api.nvim_win_get_buf(vim.api.nvim_get_current_win())
+      if vim.bo[cur_buf].filetype == "NvimTree" then
+        vim.cmd.NvimTreeToggle()
+      else
+        vim.cmd.NvimTreeFocus()
+      end
+    end
+  '';
 }
