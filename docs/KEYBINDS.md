@@ -15,6 +15,7 @@
 | `<leader>d` / `3` (visual) | PiAskSelection: Selektion als zusätzlichen Kontext |
 | `<leader>D` | Laufende pi-Anfrage abbrechen |
 | `:PiLog` | Session-Log in neuem Split öffnen |
+| `ctrl+x` (im pi-Terminal) | Laufende Generierung abbrechen (`esc` gehört nvim) |
 
 ## Fenstergröße
 
