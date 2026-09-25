@@ -40,8 +40,12 @@
       end,
     })
 
-    -- Visual-Selektion pro Fenster erhalten: beim Verlassen des Fensters
-    -- merken, beim Zurückkehren exakt wieder aktivieren.
+    -- Cursor+Selektion pro Fenster erhalten UND sichtbar halten: beim
+    -- Verlassen eines Editor-Fensters im Visual-Modus wird die Markierung
+    -- als fensterlokales Highlight eingefroren (bleibt sichtbar, waehrend
+    -- pi fokussiert ist) und beim Zurueckkehren als echte Visual-Selektion
+    -- reaktiviert. Der Selektions-Flush fuer pi passiert in toggle_pi
+    -- VOR dem Fokuswechsel (siehe dort).
     local visual_snap = {}
     local aug = vim.api.nvim_create_augroup("PiSplitKeep", { clear = true })
 
@@ -53,6 +57,15 @@
       return nil
     end
 
+    local function clear_hl(win)
+      local snap = visual_snap[win]
+      if snap and snap.hl then
+        for _, id in ipairs(snap.hl) do
+          pcall(vim.fn.matchdelete, id, win)
+        end
+      end
+    end
+
     vim.api.nvim_create_autocmd("WinLeave", {
       group = aug,
       callback = function()
@@ -61,8 +74,26 @@
         if pi_term.bufnr == nil or vim.api.nvim_win_get_buf(win) ~= pi_term.bufnr then
           kind = vis_kind()
         end
+        clear_hl(win)
         if kind then
-          visual_snap[win] = { buf = vim.api.nvim_win_get_buf(win), kind = kind }
+          local snap = { buf = vim.api.nvim_win_get_buf(win), kind = kind }
+          -- Sichtbare Markierung einfrieren (ganze Zeilen, max. 8 pro Match)
+          local s = vim.fn.getpos("v")
+          local e = vim.fn.getpos(".")
+          if s[2] > 0 and e[2] > 0 then
+            local l1, l2 = math.min(s[2], e[2]), math.max(s[2], e[2])
+            local ids, chunk = {}, {}
+            for l = l1, l2 do
+              table.insert(chunk, { l })
+              if #chunk == 8 then
+                table.insert(ids, vim.fn.matchaddpos("Visual", chunk))
+                chunk = {}
+              end
+            end
+            if #chunk > 0 then table.insert(ids, vim.fn.matchaddpos("Visual", chunk)) end
+            snap.hl = ids
+          end
+          visual_snap[win] = snap
         else
           visual_snap[win] = nil
         end
@@ -76,6 +107,11 @@
         local snap = visual_snap[win]
         if snap == nil then return end
         visual_snap[win] = nil
+        if snap.hl then
+          for _, id in ipairs(snap.hl) do
+            pcall(vim.fn.matchdelete, id, win)
+          end
+        end
         if vis_kind() ~= nil then return end -- schon in einem Visual-Modus
         vim.defer_fn(function()
           if not vim.api.nvim_win_is_valid(win) then return end
@@ -92,6 +128,20 @@
     -- nicht fokussiert -> fokussieren; fokussiert -> verstecken
     -- (Session läuft weiter).
     function _G.toggle_pi()
+      -- Selektion fuer pi sichern, BEVOR der Fokus wechselt: im pi-Fenster
+      -- blockiert der ide-context-Guard das Schreiben, und ein Fensterwechsel
+      -- zieht den Cursor zum Selektionsanfang. Die Marks '< '> existieren
+      -- erst nach dem Visual-Ende — beim ersten Visual der Session sind sie
+      -- unset, deshalb hier explizit aus Anker(v)+Cursor setzen.
+      if vis_kind() ~= nil then
+        local v = vim.fn.getpos("v")
+        local c = vim.fn.getpos(".")
+        pcall(function()
+          vim.fn.setpos("'<", v)
+          vim.fn.setpos("'>", c)
+          require("pi-ide").flush()
+        end)
+      end
       for _, win in ipairs(vim.api.nvim_list_wins()) do
         if pi_term.bufnr and vim.api.nvim_win_get_buf(win) == pi_term.bufnr then
           if win == vim.api.nvim_get_current_win() then
