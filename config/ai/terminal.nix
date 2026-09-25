@@ -8,9 +8,8 @@
 
   # pi als persistenter Toggle-Terminal (Tasten Tab/3, Normal- UND Visual-Mode).
   # Toggle versteckt nur, die Session läuft weiter; on_exit -> shutdown,
-  # damit man nie in einer bash landet. Der Editor-Kontext (Datei, Cursor,
-  # Selektion) läuft vollautomatisch über die user-level Erweiterung
-  # ~/.pi/agent/extensions/pi-ide-auto.ts — hier ist nichts zu tun.
+  # damit man nie in einer bash landet. Editor-Kontext laeuft vollautomatisch
+  # ueber die user-level Erweiterung ~/.pi/agent/extensions/pi-ide-auto.ts.
   extraConfigLua = ''
     local pi_term = require("toggleterm.terminal").Terminal:new({
       -- fullscreen: pi rendert eigenes Viewport -> Wheel/Scroll geht an pi,
@@ -22,12 +21,11 @@
       on_exit = function(term) term:shutdown() end,
     })
 
-    -- Cursor+Selektion pro Fenster erhalten UND sichtbar halten: beim
-    -- Verlassen eines Editor-Fensters im Visual-Modus wird die Markierung
-    -- als fensterlokales Highlight eingefroren (bleibt sichtbar, waehrend
-    -- pi fokussiert ist) und beim Zurueckkehren als echte Visual-Selektion
-    -- reaktiviert. Der Selektions-Flush fuer pi passiert in toggle_pi
-    -- VOR dem Fokuswechsel (siehe dort).
+    -- Cursor+Selektion pro Fenster erhalten UND sichtbar halten. WICHTIG:
+    -- das Einfrieren passiert VOR dem Fensterwechsel (toggle_pi), denn nvim
+    -- zieht beim Verlassen im Visual-Modus den Cursor zum Selektionsanfang.
+    -- WinLeave darf den eingefrorenen Highlight NICHT loeschen, sondern
+    -- nur als Fallback selbst einfrieren (C-w-Wechsel ohne toggle_pi).
     local visual_snap = {}
     local aug = vim.api.nvim_create_augroup("PiSplitKeep", { clear = true })
 
@@ -48,6 +46,27 @@
       end
     end
 
+    local function freeze_selection(win)
+      local s = vim.fn.getpos("v")
+      local e = vim.fn.getpos(".")
+      if s[2] == 0 or e[2] == 0 then return nil end
+      clear_hl(win)
+      local snap = { buf = vim.api.nvim_win_get_buf(win), kind = vis_kind() }
+      local l1, l2 = math.min(s[2], e[2]), math.max(s[2], e[2])
+      local ids, chunk = {}, {}
+      for l = l1, l2 do
+        table.insert(chunk, { l })
+        if #chunk == 8 then
+          table.insert(ids, vim.fn.matchaddpos("Visual", chunk))
+          chunk = {}
+        end
+      end
+      if #chunk > 0 then table.insert(ids, vim.fn.matchaddpos("Visual", chunk)) end
+      snap.hl = ids
+      visual_snap[win] = snap
+      return snap
+    end
+
     vim.api.nvim_create_autocmd("WinLeave", {
       group = aug,
       callback = function()
@@ -56,27 +75,13 @@
         if pi_term.bufnr == nil or vim.api.nvim_win_get_buf(win) ~= pi_term.bufnr then
           kind = vis_kind()
         end
-        clear_hl(win)
         if kind then
-          local snap = { buf = vim.api.nvim_win_get_buf(win), kind = kind }
-          -- Sichtbare Markierung einfrieren (ganze Zeilen, max. 8 pro Match)
-          local s = vim.fn.getpos("v")
-          local e = vim.fn.getpos(".")
-          if s[2] > 0 and e[2] > 0 then
-            local l1, l2 = math.min(s[2], e[2]), math.max(s[2], e[2])
-            local ids, chunk = {}, {}
-            for l = l1, l2 do
-              table.insert(chunk, { l })
-              if #chunk == 8 then
-                table.insert(ids, vim.fn.matchaddpos("Visual", chunk))
-                chunk = {}
-              end
-            end
-            if #chunk > 0 then table.insert(ids, vim.fn.matchaddpos("Visual", chunk)) end
-            snap.hl = ids
+          if visual_snap[win] == nil then
+            freeze_selection(win) -- Fallback: Cursor evtl. schon gesnappt
           end
-          visual_snap[win] = snap
+          -- Snapshot existiert schon (toggle_pi): Highlight bleibt stehen!
         else
+          clear_hl(win)
           visual_snap[win] = nil
         end
       end,
@@ -110,17 +115,16 @@
     -- nicht fokussiert -> fokussieren; fokussiert -> verstecken
     -- (Session läuft weiter).
     function _G.toggle_pi()
-      -- Selektion fuer pi sichern, BEVOR der Fokus wechselt: im pi-Fenster
-      -- blockiert der ide-context-Guard das Schreiben, und ein Fensterwechsel
-      -- zieht den Cursor zum Selektionsanfang. Die Marks '< '> existieren
-      -- erst nach dem Visual-Ende — beim ersten Visual der Session sind sie
-      -- unset, deshalb hier explizit aus Anker(v)+Cursor setzen.
+      -- Selektion einfrieren + fuer pi sichern, BEVOR der Fokus wechselt:
+      -- erst hier sind Anker(v) und Cursor ungesnappt, und die Marks '< '>
+      -- existieren beim ersten Visual der Session noch nicht (setzt Plugin
+      -- erst am Visual-Ende) — deshalb hier explizit setzen und flushen.
       if vis_kind() ~= nil then
-        local v = vim.fn.getpos("v")
-        local c = vim.fn.getpos(".")
+        local win = vim.api.nvim_get_current_win()
+        freeze_selection(win)
         pcall(function()
-          vim.fn.setpos("'<", v)
-          vim.fn.setpos("'>", c)
+          vim.fn.setpos("'<", vim.fn.getpos("v"))
+          vim.fn.setpos("'>", vim.fn.getpos("."))
           require("pi-ide").flush()
         end)
       end
