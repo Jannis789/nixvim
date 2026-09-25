@@ -21,7 +21,7 @@
 |-------|---------|
 | `3` / `Tab` | pi öffnen / fokussieren / verstecken (Session bleibt beim Verstecken leben) |
 | IDE-Kontext | pi-ide-context: Datei, Cursor und Selektion fließen automatisch in jede pi-Nachricht (Selektion 60 s frisch, sichtbar als Zitatzeile in der gesendeten Nachricht) |
-| Verbindung | Automatisch: pi verbindet sich beim ersten Öffnen selbst mit diesem nvim-Fenster (bei mehreren Editoren `/ide` manuell, `/ide off` trennt) |
+| Kontext | Vollautomatisch: die user-level Erweiterung `pi-ide-auto` legt Datei/Cursor/Selektion jeder pi-Nachricht bei — kein `/ide`, kein Zeremonie |
 | `:PiCheck` | Diagnose + zeigt pro lebendem Editor den geteilten Kontext (Datei:Zeile, Selektion frisch/verfallen); räumt tote Editor-States auf. Fehlt der Befehl → dein nvim ist ein alter Build |
 | Fensterwechsel | Visual-Selektion bleibt erhalten und wird beim Zurückkehren ins Fenster wieder aktiv |
 | `Esc` | Im pi-Split in den Normal-Mode des Splits |
