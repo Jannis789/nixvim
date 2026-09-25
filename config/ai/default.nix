@@ -1,6 +1,6 @@
 {
   imports = [
-    ./pi.nix
     ./terminal.nix
+    ./ide-context.nix
   ];
 }

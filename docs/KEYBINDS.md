@@ -6,7 +6,7 @@
 |-------|---------|
 | `1` | Tree: zu wenn fokussiert, sonst öffnen+fokussieren |
 | `2` | Editor: erstes Editor-Fenster fokussieren |
-| `3` | pi: öffnen/fokussieren/verstecken (Session bleibt beim Verstecken leben) |
+| `3` / `Tab` | pi: öffnen/fokussieren/verstecken (Session bleibt leben) — auch im Visual-Mode |
 
 ## Buffer navigation
 
@@ -15,14 +15,15 @@
 | `n` | `BufferLineCyclePrev` | Zum vorherigen Tab (links) |
 | `m` | `BufferLineCycleNext` | Zum nächsten Tab (rechts)  |
 
-## pi (headless über pi.nvim)
+## pi (TUI-Split — Taste `3` oder `Tab`, Normal- und Visual-Mode)
 
-| Keybinding | Beschreibung |
-|------------|--------------|
-| `<leader>d` / `3` | Pi-Ask: Prompt eingeben, aktueller Buffer ist Kontext; pi editiert Dateien, Buffer werden neu geladen |
-| `<leader>d` / `3` (visual) | PiAskSelection: Selektion als zusätzlichen Kontext |
-| `<leader>D` | Laufende pi-Anfrage abbrechen |
-| `:PiLog` | Session-Log in neuem Split öffnen |
+| Taste | Wirkung |
+|-------|---------|
+| `3` / `Tab` | pi öffnen / fokussieren / verstecken (Session bleibt beim Verstecken leben) |
+| IDE-Kontext | pi-ide-context: Datei, Cursor und Selektion fließen automatisch in jede pi-Nachricht (Selektion 60 s frisch, sichtbar als Zitatzeile in der gesendeten Nachricht) |
+| `/ide` (in pi) | Editor-Verbindung wählen/wechseln; `/ide off` trennt |
+| Fensterwechsel | Visual-Selektion bleibt erhalten und wird beim Zurückkehren ins Fenster wieder aktiv |
+| `Esc` | Im pi-Split in den Normal-Mode des Splits |
 | `ctrl+x` (im pi-Terminal) | Laufende Generierung abbrechen (`esc` gehört nvim) |
 
 ## Git (gitsigns)

@@ -1,11 +1,11 @@
 { ... }: {
   # Zentrale Shortcut-Tabelle — reine Daten, keine Logik. Die Aktionen liegen
   # in den jeweiligen Modulen: _G.toggle_tree (tree.nix), _G.focus_editor
-  # (ui.nix), _G.toggle_pi (terminal.nix), _G.git_* (git.nix).
-  # Bewusste Ausnahmen: n/m = buffer-lokal in bufferline.nix,
-  # <Tab> = toggleterm-Setting in terminal.nix.
+  # (ui.nix), _G.toggle_pi (terminal.nix),
+  # _G.git_* (git.nix).
+  # Bewusste Ausnahmen: n/m = buffer-lokal in bufferline.nix.
   keymaps = [
-    ## Scopes: 1 = Tree, 2 = Editor, 3 = pi — nur Normal-Mode
+    ## Scopes: 1 = Tree, 2 = Editor, 3/Tab = pi — Normal- und Visual-Mode
     {
       key = "1";
       action.__raw = ''function() _G.toggle_tree() end'';
@@ -22,37 +22,13 @@
       key = "3";
       action.__raw = ''function() _G.toggle_pi() end'';
       options.desc = "pi (AI)";
-      mode = ["n"];
-    }
-
-    ## pi headless (pi.nvim)
-    {
-      key = "<leader>d";
-      action = "<cmd>PiAsk<CR>";
-      mode = [ "n" ];
-      options = {
-        desc = "pi: Prompt mit Buffer als Kontext";
-        silent = true;
-      };
+      mode = ["n" "v"];
     }
     {
-      key = "<leader>d";
-      action = "<cmd>PiAskSelection<CR>";
-      mode = [ "v" ];
-      options = {
-        desc = "pi: Prompt mit Selektion als Kontext";
-        silent = true;
-      };
-    }
-    {
-      # Headless gibt es kein Terminal-Strg-C — Abbruch nur über diesen Befehl
-      key = "<leader>D";
-      action = "<cmd>PiCancel<CR>";
-      mode = [ "n" ];
-      options = {
-        desc = "pi: laufende Anfrage abbrechen";
-        silent = true;
-      };
+      key = "<Tab>";
+      action.__raw = ''function() _G.toggle_pi() end'';
+      options.desc = "pi (AI)";
+      mode = ["n" "v"];
     }
 
     ## Git (gitsigns)
