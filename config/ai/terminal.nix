@@ -7,18 +7,37 @@
   };
 
   # pi als persistenter Toggle-Terminal (Tasten Tab/3, Normal- UND Visual-Mode).
-  # Toggle versteckt nur, die Session läuft weiter; on_exit -> shutdown,
-  # damit man nie in einer bash landet. Den Editor-Kontext (Datei, Cursor,
-  # Selektion) liefert pi-ide-context (ide-context.nix) — nicht dieses Modul.
+  # Beim ersten Öffnen verbindet sich pi automatisch mit diesem nvim
+  # (tippt /ide + Enter). Toggle versteckt nur, die Session läuft weiter;
+  # on_exit -> shutdown, damit man nie in einer bash landet.
   extraConfigLua = ''
-    local pi_term = require("toggleterm.terminal").Terminal:new({
+    local pi_term
+    local auto_connect_pending = true
+
+    pi_term = require("toggleterm.terminal").Terminal:new({
       -- fullscreen: pi rendert eigenes Viewport -> Wheel/Scroll geht an pi,
       -- auch waehrend der Agent streamt (kein Follow-Output-Snap mehr)
       cmd = "pi -c --tui-mode fullscreen",
       hidden = true,
       direction = "vertical",
       size = function() return math.floor(vim.o.columns * 0.4) end,
-      on_exit = function(term) term:shutdown() end,
+      -- Auto-Connect: beim frischen pi-Start /ide + Enter eintippen
+      on_open = function(term)
+        if auto_connect_pending then
+          auto_connect_pending = false
+          vim.defer_fn(function()
+            if pi_term.job_id == nil then return end
+            pi_term:send("/ide", false, false)
+            vim.defer_fn(function()
+              pi_term:send(string.char(13), false, false) -- Enter
+            end, 600)
+          end, 1500)
+        end
+      end,
+      on_exit = function(term)
+        term:shutdown()
+        auto_connect_pending = true -- neue Session -> neu verbinden
+      end,
     })
 
     -- Visual-Selektion pro Fenster erhalten: beim Verlassen des Fensters
