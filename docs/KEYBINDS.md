@@ -14,6 +14,7 @@
 |-----|---------------------|--------------------------|
 | `n` | `BufferLineCyclePrev` | Zum vorherigen Tab (links) |
 | `m` | `BufferLineCycleNext` | Zum nächsten Tab (rechts)  |
+| `Leertaste b d` | Buffer schließen (aktuelle „Tab"); bei ungespeicherten Änderungen erst speichern |
 
 ## pi (TUI-Split — Taste `3` oder `Tab`, Normal- und Visual-Mode)
 
