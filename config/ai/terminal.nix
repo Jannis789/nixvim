@@ -65,6 +65,10 @@
       end
     end
 
+    -- Eingefrorene Selektion knallgelb (Search), damit sie im Editor-Split
+    -- unuebersehbar sichtbar bleibt, solange pi fokussiert ist.
+    vim.cmd("highlight default link PiFrozenSel Search")
+
     local function freeze_selection(win)
       local s = vim.fn.getpos("v")
       local e = vim.fn.getpos(".")
@@ -76,11 +80,11 @@
       for l = l1, l2 do
         table.insert(chunk, { l })
         if #chunk == 8 then
-          table.insert(ids, vim.fn.matchaddpos("Visual", chunk))
+          table.insert(ids, vim.fn.matchaddpos("PiFrozenSel", chunk))
           chunk = {}
         end
       end
-      if #chunk > 0 then table.insert(ids, vim.fn.matchaddpos("Visual", chunk)) end
+      if #chunk > 0 then table.insert(ids, vim.fn.matchaddpos("PiFrozenSel", chunk)) end
       snap.hl = ids
       visual_snap[win] = snap
       return snap
