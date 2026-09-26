@@ -4,10 +4,8 @@
     settings.shade_terminals = false;
   };
 
-  # pi als persistenter Toggle-Terminal (Tasten Tab/3, Normal- UND Visual-Mode).
-  # Toggle versteckt nur, die Session läuft weiter; on_exit -> shutdown,
-  # damit man nie in einer bash landet. Editor-Kontext (Live-Widget +
-  # Attach) laeuft ueber pi-x-ide — siehe pi-x-ide.nix.
+  # pi als persistenter Toggle (Tab/3, Normal+Visual). Verstecken hält die
+  # Session am Leben; on_exit räumt auf (keine bash-Reste). Kontext: pi-x-ide.nix.
   extraConfigLua = ''
     local pi_term = require("toggleterm.terminal").Terminal:new({
       -- fullscreen: pi rendert eigenes Viewport -> Wheel/Scroll geht an pi,
