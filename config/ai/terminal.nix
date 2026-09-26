@@ -65,11 +65,16 @@
       end
     end
 
-    -- Eingefrorene Selektion knallgelb (Search), damit sie im Editor-Split
-    -- unuebersehbar sichtbar bleibt, solange pi fokussiert ist.
-    vim.cmd("highlight default link PiFrozenSel Search")
-
     local function freeze_selection(win)
+      -- PiFrozenSel bekommt die ECHTEN Visual-Farben: matchaddpos mit der
+      -- Gruppe "Visual" rendert in unfokussierten Fenstern abweichend (gedimmt)
+      -- und wirkt dann wie eine verworfene Selektion.
+      local vbg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("Visual")), "bg#", "gui")
+      if vbg == nil or vbg == "" then vbg = "#45475A" end
+      local vfg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("Visual")), "fg#", "gui")
+      local hcmd = "highlight PiFrozenSel guibg=" .. vbg
+      if vfg ~= nil and vfg ~= "" then hcmd = hcmd .. " guifg=" .. vfg end
+      vim.cmd(hcmd)
       local s = vim.fn.getpos("v")
       local e = vim.fn.getpos(".")
       if s[2] == 0 or e[2] == 0 then return nil end
