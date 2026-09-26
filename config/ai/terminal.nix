@@ -21,11 +21,22 @@
       on_exit = function(term) term:shutdown() end,
     })
 
+    -- Esc im pi-Split: Insert verlassen und direkt in den Editor. Der
+    -- Terminal-Normal-Modus ist unbrauchbar (Fullscreen-TUI malt staendig
+    -- neu, kein sinnvolles Scrolling) — wer ihn fuer Copy-Ausnahmen braucht,
+    -- erreicht ihn manuell mit Strg+\\ Strg+N.
+    function _G.exit_pi_to_editor()
+      vim.cmd('stopinsert')
+      vim.defer_fn(function()
+        if _G.focus_editor then _G.focus_editor() end
+      end, 10)
+    end
+
     -- Cursor+Selektion pro Fenster erhalten UND sichtbar halten. WICHTIG:
-    -- das Einfrieren passiert VOR dem Fensterwechsel (toggle_pi), denn nvim
-    -- zieht beim Verlassen im Visual-Modus den Cursor zum Selektionsanfang.
-    -- WinLeave darf den eingefrorenen Highlight NICHT loeschen, sondern
-    -- nur als Fallback selbst einfrieren (C-w-Wechsel ohne toggle_pi).
+    -- das Einfrieren muss VOR dem Fensterwechsel passieren (toggle_pi), denn
+    -- nvim zieht beim Verlassen eines Fensters im Visual-Modus den Cursor
+    -- zum Selektionsanfang — ein WinLeave-Snapshot allein wuerde nur die
+    -- erste Zeile einfrieren. WinLeave ist nur Fallback fuer C-w-Wechsel.
     local visual_snap = {}
     local aug = vim.api.nvim_create_augroup("PiSplitKeep", { clear = true })
 
@@ -115,10 +126,11 @@
     -- nicht fokussiert -> fokussieren; fokussiert -> verstecken
     -- (Session läuft weiter).
     function _G.toggle_pi()
-      -- Selektion einfrieren + fuer pi sichern, BEVOR der Fokus wechselt:
-      -- erst hier sind Anker(v) und Cursor ungesnappt, und die Marks '< '>
-      -- existieren beim ersten Visual der Session noch nicht (setzt Plugin
-      -- erst am Visual-Ende) — deshalb hier explizit setzen und flushen.
+      -- Selektion fuer pi sichern, BEVOR der Fokus wechselt: im pi-Fenster
+      -- blockiert der ide-context-Guard das Schreiben, und ein Fensterwechsel
+      -- zieht den Cursor zum Selektionsanfang. Die Marks '< '> existieren
+      -- erst nach dem Visual-Ende — beim ersten Visual der Session sind sie
+      -- unset, deshalb hier explizit aus Anker(v)+Cursor setzen.
       if vis_kind() ~= nil then
         local win = vim.api.nvim_get_current_win()
         freeze_selection(win)

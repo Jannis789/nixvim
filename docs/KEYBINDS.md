@@ -24,7 +24,7 @@
 | Kontext | Vollautomatisch: die user-level Erweiterung `pi-ide-auto` legt Datei/Cursor/Selektion jeder pi-Nachricht bei — kein `/ide`, kein Zeremonie |
 | `:PiCheck` | Diagnose + zeigt pro lebendem Editor den geteilten Kontext (Datei:Zeile, Selektion frisch/verfallen); räumt tote Editor-States auf. Fehlt der Befehl → dein nvim ist ein alter Build |
 | Fensterwechsel | Visual-Selektion bleibt erhalten und wird beim Zurückkehren ins Fenster wieder aktiv |
-| `Esc` | Im pi-Split in den Normal-Mode des Splits |
+| `Esc` | Zurück in den Editor (pi bleibt offen). Terminal-Normal nur manuell via `Strg+\ Strg+N` (z. B. zum Kopieren) |
 | `ctrl+x` (im pi-Terminal) | Laufende Generierung abbrechen (`esc` gehört nvim) |
 
 ## Git (gitsigns)

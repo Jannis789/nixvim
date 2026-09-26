@@ -79,13 +79,15 @@
       options.silent = true; options.desc = "Split flacher";
     }
 
-    ## ESC im Terminal -> Normal-Mode (sonst landet sie beim Job, z.B. pi)
+    ## ESC im pi-Split -> direkt zurück in den Editor (Terminal-Normal ist
+    ## unbrauchbar: Fullscreen-TUI, kein Scrolling). Manuell erreichbar:
+    ## Strg+\\ Strg+N — nur für Copy-Ausnahmen.
     {
       key = "<Esc>";
-      action = "<C-\\><C-n>";
+      action.__raw = ''function() _G.exit_pi_to_editor() end'';
       mode = ["t"];
       options.silent = true;
-      options.desc = "Terminal -> Normal";
+      options.desc = "pi -> Editor";
     }
 
     ## Telescope (Leader = Leertaste)
