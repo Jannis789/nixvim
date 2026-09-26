@@ -113,7 +113,7 @@
         local snap = visual_snap[win]
         if snap == nil then return end
         visual_snap[win] = nil
-        if snap.hl then
+        if snap.hl and type(snap.hl) == "table" then
           for _, id in ipairs(snap.hl) do
             pcall(vim.fn.matchdelete, id, win)
           end
