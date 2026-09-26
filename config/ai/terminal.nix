@@ -17,11 +17,11 @@
       cmd = "pi -c --tui-mode fullscreen",
       hidden = true,
       direction = "vertical",
-      size = function() return math.floor(vim.o.columns * 0.5) end,
+      size = function() return math.floor(vim.o.columns / 3) end,
       -- toggleterm setzt winfixwidth und ignoriert teils die size-Funktion
       -- (Fenster blieb auf Default 12) — Breite daher hier garantiert setzen.
       on_open = function(term)
-        local target = math.floor(vim.o.columns * 0.5)
+        local target = math.floor(vim.o.columns / 3)
         if math.abs(vim.api.nvim_win_get_width(0) - target) > 2 then
           vim.api.nvim_win_set_width(0, target)
         end
