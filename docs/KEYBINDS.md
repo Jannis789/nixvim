@@ -24,7 +24,7 @@
 | IDE-Kontext | pi-ide-context: Datei, Cursor und Selektion fließen automatisch in jede pi-Nachricht (Selektion 60 s frisch, sichtbar als Zitatzeile in der gesendeten Nachricht) |
 | IDE-Kontext | pi-x-ide: Live-Widget in pi (`⧉ flake.nix#L10-L18`); `Leertaste a a` hängt die Selektion als `@datei#Lx-Ly` an die Eingabe |
 | `/ide status` (in pi) | pi-x-ide Verbindungs-Status; `/ide off` trennt |
-| Fensterwechsel | Visual-Selektion bleibt erhalten und wird beim Zurückkehren ins Fenster wieder aktiv |
+| Fensterwechsel | Die Markierung bleibt im Editor-Fenster sichtbar (eingefroren), bis eine neue Selektion sie ersetzt |
 | `Esc` | Zurück in den Editor (pi bleibt offen). Terminal-Normal nur manuell via `Strg+\ Strg+N` (z. B. zum Kopieren) |
 | `ctrl+x` (im pi-Terminal) | Laufende Generierung abbrechen (`esc` gehört nvim) |
 
