@@ -8,8 +8,8 @@
 
   # pi als persistenter Toggle-Terminal (Tasten Tab/3, Normal- UND Visual-Mode).
   # Toggle versteckt nur, die Session läuft weiter; on_exit -> shutdown,
-  # damit man nie in einer bash landet. Editor-Kontext laeuft vollautomatisch
-  # ueber die user-level Erweiterung ~/.pi/agent/extensions/pi-ide-auto.ts.
+  # damit man nie in einer bash landet. Editor-Kontext (Live-Widget + Attach)
+  # laeuft ueber pi-x-ide — siehe pi-x-ide.nix.
   extraConfigLua = ''
     local pi_term = require("toggleterm.terminal").Terminal:new({
       -- fullscreen: pi rendert eigenes Viewport -> Wheel/Scroll geht an pi,
@@ -140,13 +140,7 @@
       -- erst nach dem Visual-Ende — beim ersten Visual der Session sind sie
       -- unset, deshalb hier explizit aus Anker(v)+Cursor setzen.
       if vis_kind() ~= nil then
-        local win = vim.api.nvim_get_current_win()
-        freeze_selection(win)
-        pcall(function()
-          vim.fn.setpos("'<", vim.fn.getpos("v"))
-          vim.fn.setpos("'>", vim.fn.getpos("."))
-          require("pi-ide").flush()
-        end)
+        freeze_selection(vim.api.nvim_get_current_win())
       end
       for _, win in ipairs(vim.api.nvim_list_wins()) do
         if pi_term.bufnr and vim.api.nvim_win_get_buf(win) == pi_term.bufnr then
