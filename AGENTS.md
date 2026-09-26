@@ -37,3 +37,17 @@ External reference (read first when in doubt):
 - https://nix-community.github.io/nixvim/user-guide/install.html — 4 usage modes
 - https://nix-community.github.io/nixvim/platforms/standalone.html — new evalNixvim API
 - https://nix-community.github.io/nixvim/plugins/ — full plugin option list
+
+## pi-Integration (nicht deklarativ)
+
+Die pi-seitigen Teile leben in `~/.pi` (außerhalb von Nix). `scripts/pi-setup.sh`
+setzt sie idempotent — nach pi-Update oder auf neuem Rechner laufen lassen:
+
+```
+./scripts/pi-setup.sh
+```
+
+Enthält: `pg` für mem0ai, pi-x-ide-Checkout + dist (gepinnt wie
+`config/ai/pi-x-ide.nix`), Extensions (Cursor-Status-Anzeige) und einen
+nvim-Smoke-Test (`:PiSel`). Das Sidecar-Binary lädt das nvim-Plugin selbst
+zur Laufzeit (`~/.cache/nvim/pi-x-ide`).
