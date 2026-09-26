@@ -154,5 +154,22 @@
       end
       pi_term:toggle()
     end
+
+    -- :PiSel — Live-Debug: was ist pro Fenster eingefroren, wie viele
+    -- Matches sind im Editor-Fenster? (Fehlt der Befehl: alter Build.)
+    vim.api.nvim_create_user_command("PiSel", function()
+      local out = {}
+      for win, snap in pairs(visual_snap) do
+        table.insert(out, ("fenster %d: kind=%s buf=%d matches=%s"):format(win, tostring(snap.kind), snap.buf or -1, snap.hl and #snap.hl or 0))
+      end
+      if #out == 0 then table.insert(out, "keine Snapshots") end
+      for _, w in ipairs(vim.api.nvim_list_wins()) do
+        local ft = vim.bo[vim.api.nvim_win_get_buf(w)].filetype
+        if ft ~= "toggleterm" and ft ~= "NvimTree" then
+          table.insert(out, "editor-fenster " .. w .. ": matches=" .. #vim.fn.getmatches(w))
+        end
+      end
+      vim.notify(table.concat(out, "\n"), vim.log.levels.INFO, { title = ":PiSel" })
+    end, {})
   '';
 }
