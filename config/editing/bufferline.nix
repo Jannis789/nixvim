@@ -64,8 +64,30 @@
   keymaps = [
     {
       key = "<leader>bd";
-      action = ":bdelete<CR>";
-      options.desc = "Delete buffer";
+      action.__raw = ''
+        function()
+          local api = vim.api
+          local cur = api.nvim_get_current_buf()
+          if vim.bo[cur].buftype ~= "" then return end -- pi/Plugin-Buffer: nie
+          local target = nil
+          for _, b in ipairs(api.nvim_list_bufs()) do
+            if b ~= cur and vim.fn.buflisted(b) == 1 and vim.bo[b].buftype == "" and api.nvim_buf_get_name(b) ~= "" then
+              target = b
+              break
+            end
+          end
+          if target == nil then
+            vim.notify("letzter Buffer — nichts zum Zurückgreifen", vim.log.levels.WARN, { title = "<leader>bd" })
+            return
+          end
+          api.nvim_set_current_buf(target)
+          local ok, err = pcall(vim.cmd, "bdelete " .. cur)
+          if not ok then
+            vim.notify("Buffer hat ungespeicherte Änderungen — erst :w", vim.log.levels.WARN)
+          end
+        end
+      '';
+      options.desc = "Buffer schließen (Fallback auf anderen Tab)";
       mode = ["n" "v" "x" "s" "o" "t" "l"];
     }
     {
