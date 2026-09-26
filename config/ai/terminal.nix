@@ -126,6 +126,9 @@
     -- nicht fokussiert -> fokussieren; fokussiert -> verstecken
     -- (Session läuft weiter).
     function _G.toggle_pi()
+      -- Aus dem Terminal-Insert (Chat) kommend: erst Insert verlassen,
+      -- sonst bleibt nach dem Verstecken ein haengender Insert-Modus.
+      if vim.fn.mode() == 't' then vim.cmd('stopinsert') end
       -- Selektion fuer pi sichern, BEVOR der Fokus wechselt: im pi-Fenster
       -- blockiert der ide-context-Guard das Schreiben, und ein Fensterwechsel
       -- zieht den Cursor zum Selektionsanfang. Die Marks '< '> existieren

@@ -6,7 +6,7 @@
 |-------|---------|
 | `1` | Tree: zu wenn fokussiert, sonst öffnen+fokussieren |
 | `2` | Editor: erstes Editor-Fenster fokussieren |
-| `3` / `Tab` | pi: öffnen/fokussieren/verstecken (Session bleibt leben) — auch im Visual-Mode |
+| `3` / `Tab` | pi: öffnen/fokussieren/verstecken (Session bleibt leben) — im Visual- und Terminal-Mode (`3` versteckt pi direkt aus dem Chat heraus; dafür ist `3` im Chat selbst nicht tippbar, `Tab` bleibt es) |
 
 ## Buffer navigation
 

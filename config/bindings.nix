@@ -5,7 +5,8 @@
   # _G.git_* (git.nix).
   # Bewusste Ausnahmen: n/m = buffer-lokal in bufferline.nix.
   keymaps = [
-    ## Scopes: 1 = Tree, 2 = Editor, 3/Tab = pi — Normal- und Visual-Mode
+    ## Scopes: 1 = Tree, 2 = Editor, 3/Tab = pi — Normal-, Visual- und
+    ## Terminal-Mode (Tab bewusst NICHT im Terminal: bleibt im pi-Chat tippbar)
     {
       key = "1";
       action.__raw = ''function() _G.toggle_tree() end'';
@@ -22,7 +23,7 @@
       key = "3";
       action.__raw = ''function() _G.toggle_pi() end'';
       options.desc = "pi (AI)";
-      mode = ["n" "v"];
+      mode = ["n" "v" "t"];
     }
     {
       key = "<Tab>";
