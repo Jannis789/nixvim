@@ -17,7 +17,7 @@
       cmd = "pi -c --tui-mode fullscreen",
       hidden = true,
       direction = "vertical",
-      size = function() return math.floor(vim.o.columns * 0.4) end,
+      size = function() return math.floor(vim.o.columns * 0.5) end,
       on_exit = function(term) term:shutdown() end,
     })
 
